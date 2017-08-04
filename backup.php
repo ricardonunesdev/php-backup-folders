@@ -27,12 +27,17 @@ if (!is_dir(BACKUP_DIR) && !mkdir(BACKUP_DIR, 0777, true)) {
 // Get files and folders from root path
 $files = scandir(ROOT_PATH);
 
+// Exclude
+$exclude = array('.', '..'); // add more if needed
+
 // Debug
 foreach ($files as $file) {
-    if (is_dir($file)) {
-        echo 'Folder: '.$file.'<br />'.PHP_EOL;
-    } else {
-        echo 'Folder: '.$file.'<br />'.PHP_EOL;
+    if (!in_array($file, $exclude)) {
+        if (is_dir($file)) {
+            echo 'Folder: '.$file.'<br />'.PHP_EOL;
+        } else {
+            echo 'Folder: '.$file.'<br />'.PHP_EOL;
+        }
     }
 }
 
