@@ -25,20 +25,57 @@ if (!is_dir(BACKUP_DIR) && !mkdir(BACKUP_DIR, 0777, true)) {
 }
 
 // Get files and folders from root path
-$files = scandir(ROOT_PATH);
+$scan_items = scandir(ROOT_PATH);
 
-// Exclude
+// Exclude specific files and folders
 $exclude = array('.', '..'); // add more if needed
 
+// Folders to backup
+$folders = array();
+
 // Debug
-foreach ($files as $file) {
-    if (!in_array($file, $exclude)) {
-        if (is_dir($file)) {
-            echo 'Folder: '.$file.'<br />'.PHP_EOL;
+foreach ($scan_items as $scan_item) {
+    if (!in_array($scan_item, $exclude)) {
+        if (is_dir(ROOT_PATH.$scan_item)) {
+            $folders[] = $scan_item;
+            echo 'Folder: '.$scan_item.'<br />'.PHP_EOL;
         } else {
-            echo 'Folder: '.$file.'<br />'.PHP_EOL;
+            echo 'File: '.$scan_item.'<br />'.PHP_EOL;
         }
     }
+}
+
+// Override folders if needed
+// $folders = array();
+
+foreach ($folders as $folder) {
+
+    echo 'Backing up '.$folder.'<br />'.PHP_EOL;
+
+    $path = ROOT_PATH.$folder;
+
+    // Get all files recursively
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($path),
+        RecursiveIteratorIterator::LEAVES_ONLY,
+        RecursiveIteratorIterator::CATCH_GET_CHILD
+    );
+
+    if (iterator_count($files) > 0) {
+
+        // $zip = new ZipArchive();
+        // $zip->open(BACKUP_DIR.$folder.'.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+        foreach ($files as $file) {
+            if (!is_dir($file)) {
+                echo 'File: '.$file.'<br />'.PHP_EOL;
+            }
+        }
+
+        // $zip->close();
+    }
+
+    break; // one folder
 }
 
 // Revert umask
