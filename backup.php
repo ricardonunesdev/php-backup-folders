@@ -71,7 +71,7 @@ foreach ($folders as $folder) {
             if (!is_dir($file)) {
                 $relative = substr($file, strlen(ROOT_PATH.$folder) + 1);
 
-                echo 'Compressing file - '.$relative.'<br />'.PHP_EOL;
+                // echo 'Compressing file - '.$relative.'<br />'.PHP_EOL;
 
                 $zip->addFile($file, $relative);
             }
@@ -84,7 +84,7 @@ foreach ($folders as $folder) {
         echo 'No files to compress<br /><br />'.PHP_EOL;
     }
 
-    break; // one folder
+    // break; // one folder
 }
 
 echo 'Done<br />'.PHP_EOL;
